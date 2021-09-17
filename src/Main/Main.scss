@@ -1,0 +1,45 @@
+.main {
+  font-family: "Raleway", sans-serif;
+  overflow-y: scroll;
+  text-align: center;
+  margin-top: 10vh;
+  width: 60vw;
+  height: 80vh;
+  background-color: white;
+  scrollbar-width: none; /* Hide scrollbar for firefox */
+
+  section {
+    width: 80%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    padding-left: 2vw;
+
+    img {
+      height: 15vh;
+      width: 15vh;
+      border: 1px #f0eeeb solid;
+      border-radius: 50%;
+    }
+
+    div {
+      width: 60%;
+      text-align: left;
+      margin-left: 2vw;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: 700;
+      margin: 10px 0px;
+    }
+    p {
+      font-size: 16px;
+      padding-left: 1vw;
+      margin: 5px 0px;
+    }
+  }
+}
+
+.main::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
