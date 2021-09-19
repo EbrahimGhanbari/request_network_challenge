@@ -1,0 +1,17 @@
+@import "../variables.scss";
+
+.input-bar {
+  border: none;
+  border-bottom: 1px solid $border-color;
+}
+.input-bar:focus {
+  outline: none;
+  border-bottom: 2px solid black;
+}
+
+.search {
+  padding-left: 1vw;
+  width: 95%;
+  height: 5%;
+  font-size: 18px;
+}

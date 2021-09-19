@@ -1,32 +1,28 @@
+@import "../variables.scss";
+
 .main {
   font-family: "Raleway", sans-serif;
   overflow-y: scroll;
-  text-align: center;
   margin-top: 10vh;
+  padding-top: 1vh;
   width: 60vw;
   height: 80vh;
   background-color: white;
   scrollbar-width: none; /* Hide scrollbar for firefox */
 
   section {
-    width: 80%;
-    height: 30%;
     display: flex;
-    align-items: center;
-    padding-left: 2vw;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 4vh 2vw 0vh 2vw;
 
     img {
       height: 15vh;
       width: 15vh;
-      border: 1px #f0eeeb solid;
+      border: 1px $border-color solid;
       border-radius: 50%;
     }
 
-    div {
-      width: 60%;
-      text-align: left;
-      margin-left: 2vw;
-    }
     h1 {
       font-size: 40px;
       font-weight: 700;
@@ -37,7 +33,44 @@
       padding-left: 1vw;
       margin: 5px 0px;
     }
+
+    span {
+      display: inline-block;
+      margin-left: 1vw;
+      margin-top: 1vh;
+      padding: 7px;
+      border-radius: 15%;
+      background-color: bisque;
+    }
+    button {
+      border: none;
+      background-color: transparent;
+      padding-top: 2vh;
+    }
   }
+}
+
+.element-text {
+  width: 80%;
+  text-align: left;
+  margin-left: 2vw;
+}
+
+.grades {
+  width: 25%;
+  padding-top: 1vh;
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.tag-input {
+  height: 2vh;
+  font-size: 16px;
+  margin-left: 1vw;
+  margin-top: 2vh;
+  padding-bottom: 5px;
 }
 
 .main::-webkit-scrollbar {

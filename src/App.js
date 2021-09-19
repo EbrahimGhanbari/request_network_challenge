@@ -1,7 +1,7 @@
 import "./App.scss";
 import Main from "./Main";
 
-export default function () {
+export default function App() {
   return (
     <div className="app">
       <Main />
