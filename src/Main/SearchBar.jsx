@@ -26,12 +26,20 @@ const filterFunction = (data, searchKeys, userInput) => {
 };
 
 export default function TagBar(prop) {
-  const { data, setFilteredData, placeHolder, searchField } = prop;
+  const {
+    data,
+    setFilteredData,
+    placeHolder,
+    searchField,
+    searchInput,
+    setSearchInput,
+  } = prop;
+
   const handleSearch = (event) => {
-    let userInput = event.target.value.toLowerCase();
+    setSearchInput([...searchInput, event.target.value.toLowerCase()]);
     let result = [];
     result = data.filter((data) => {
-      return filterFunction(data, searchField, userInput);
+      return filterFunction(data, searchField, searchInput);
     });
 
     setFilteredData(result);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { ImPlus, ImMinus } from "react-icons/im";
 import SearchBar from "./SearchBar";
 import Grades from "./Grades";
 import Tag from "./Tag";
+import CollapseButton from "./CollapseButton";
 import axios from "axios";
 import "./Main.scss";
 
@@ -10,11 +10,11 @@ const averageCalculator = (array) => {
   const sum = array.reduce((a, c) => parseFloat(a) + parseFloat(c));
   return sum / array.length;
 };
-const iconSize = 24;
 export default function Main() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isCollapsed, setIsCollapsed] = useState([]);
+  const [SearchInput, setSearchInput] = useState([]);
 
   useEffect(() => {
     axios
@@ -28,39 +28,20 @@ export default function Main() {
       });
   }, []);
 
-  const collapseHandler = (index) => {
-    isCollapsed.includes(index)
-      ? setIsCollapsed(isCollapsed.filter((item) => item !== index))
-      : setIsCollapsed([...isCollapsed, index]);
-  };
-
-  //!! Typically you want to save the tags in the DB !!
-  // Add the tags to the data
-  const submitTag = (event, index) => {
-    const newData = [...data];
-    const tag = event.target.value;
-    if (!newData[index].tags) {
-      newData[index].tags = [tag];
-    } else {
-      newData[index].tags.push(tag);
-    }
-    setData(newData);
-    setFilteredData(newData);
-
-    //Clear the input
-    event.target.value = "";
-  };
-
   return (
     <div className="main">
       <SearchBar
         searchField={["firstName", "lastName"]}
+        SearchInput={SearchInput}
+        setSearchInput={setSearchInput}
         setFilteredData={setFilteredData}
         data={data}
         placeHolder="Search by name"
       />
       <SearchBar
         searchField={["tags"]}
+        SearchInput={SearchInput}
+        setSearchInput={setSearchInput}
         setFilteredData={setFilteredData}
         data={data}
         placeHolder="Search by tag"
@@ -76,22 +57,6 @@ export default function Main() {
                 <p>Company: {row.company}</p>
                 <p>Skill: {row.skill}</p>
                 <p>Average: {averageCalculator(row.grades)}%</p>
-                {/* <>
-                  {row.tags &&
-                    row.tags.map((tag, index) => {
-                      return <span key={index}>{tag}</span>;
-                    })}
-                  <div>
-                    <input
-                      type="text"
-                      onKeyDown={(event) =>
-                        event.key === "Enter" && submitTag(event, index)
-                      }
-                      className="tag-input input-bar"
-                      placeholder="Add a tag"
-                    ></input>
-                  </div>
-                </> */}
                 <Tag
                   row={row}
                   data={data}
@@ -101,17 +66,11 @@ export default function Main() {
                 />
                 <Grades row={row} isCollapsed={isCollapsed} index={index} />
               </div>
-              <button
-                onClick={() => {
-                  collapseHandler(index);
-                }}
-              >
-                {isCollapsed.includes(index) ? (
-                  <ImMinus size={iconSize} />
-                ) : (
-                  <ImPlus size={iconSize} />
-                )}
-              </button>
+              <CollapseButton
+                isCollapsed={isCollapsed}
+                setIsCollapsed={setIsCollapsed}
+                index={index}
+              />
             </section>
           </div>
         );
