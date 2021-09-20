@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { ImPlus, ImMinus } from "react-icons/im";
 import SearchBar from "./SearchBar";
+import Grades from "./Grades";
+import Tag from "./Tag";
 import axios from "axios";
 import "./Main.scss";
 
@@ -13,8 +15,6 @@ export default function Main() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isCollapsed, setIsCollapsed] = useState([]);
-  const [tags, setTags] = useState([]);
-  const inputTag = useRef(null);
 
   useEffect(() => {
     axios
@@ -34,20 +34,36 @@ export default function Main() {
       : setIsCollapsed([...isCollapsed, index]);
   };
 
-  const submitTag = (event) => {
-    event.preventDefault();
-    // if (event.keyCode === 13) {
-    //   console.log("event.target.value");
-    // }
-    console.log(inputTag.current);
+  //!! Typically you want to save the tags in the DB !!
+  // Add the tags to the data
+  const submitTag = (event, index) => {
+    const newData = [...data];
+    const tag = event.target.value;
+    if (!newData[index].tags) {
+      newData[index].tags = [tag];
+    } else {
+      newData[index].tags.push(tag);
+    }
+    setData(newData);
+    setFilteredData(newData);
+
+    //Clear the input
+    event.target.value = "";
   };
 
   return (
     <div className="main">
       <SearchBar
+        searchField={["firstName", "lastName"]}
         setFilteredData={setFilteredData}
         data={data}
         placeHolder="Search by name"
+      />
+      <SearchBar
+        searchField={["tags"]}
+        setFilteredData={setFilteredData}
+        data={data}
+        placeHolder="Search by tag"
       />
       {filteredData.map((row, index) => {
         return (
@@ -60,31 +76,31 @@ export default function Main() {
                 <p>Company: {row.company}</p>
                 <p>Skill: {row.skill}</p>
                 <p>Average: {averageCalculator(row.grades)}%</p>
-                <span>tag10</span>
-                <form onSubmit={(event) => submitTag(event)}>
-                  <input
-                    type="text"
-                    ref={inputTag}
-                    className="tag-input input-bar"
-                    placeholder="Add a tag"
-                  ></input>
-                </form>
-                {isCollapsed.includes(index) ? (
-                  <div className="grades">
-                    {row.grades.map((grade, index) => {
-                      return (
-                        <div key={index}>
-                          <p> {`Test ${index + 1}`}</p>
-                          <p> {grade}%</p>
-                        </div>
-                      );
+                {/* <>
+                  {row.tags &&
+                    row.tags.map((tag, index) => {
+                      return <span key={index}>{tag}</span>;
                     })}
+                  <div>
+                    <input
+                      type="text"
+                      onKeyDown={(event) =>
+                        event.key === "Enter" && submitTag(event, index)
+                      }
+                      className="tag-input input-bar"
+                      placeholder="Add a tag"
+                    ></input>
                   </div>
-                ) : (
-                  ""
-                )}
+                </> */}
+                <Tag
+                  row={row}
+                  data={data}
+                  setFilteredData={setFilteredData}
+                  setData={setData}
+                  index={index}
+                />
+                <Grades row={row} isCollapsed={isCollapsed} index={index} />
               </div>
-
               <button
                 onClick={() => {
                   collapseHandler(index);
