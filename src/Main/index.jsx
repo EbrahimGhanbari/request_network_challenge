@@ -5,16 +5,24 @@ import Tag from "./Tag";
 import CollapseButton from "./CollapseButton";
 import axios from "axios";
 import "./Main.scss";
+import { dataFiltering, averageCalculator } from "./helperFunctions";
 
-const averageCalculator = (array) => {
-  const sum = array.reduce((a, c) => parseFloat(a) + parseFloat(c));
-  return sum / array.length;
-};
 export default function Main() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isCollapsed, setIsCollapsed] = useState([]);
-  const [SearchInput, setSearchInput] = useState([]);
+  const [nameSearchInput, setNameSearchInput] = useState("");
+  const [tagSearchInput, setTagSearchInput] = useState("");
+
+  useEffect(() => {
+    const result = data.filter((data) => {
+      return (
+        dataFiltering(data, ["firstName", "lastName"], nameSearchInput) &&
+        dataFiltering(data, ["tags"], tagSearchInput)
+      );
+    });
+    setFilteredData(result);
+  }, [nameSearchInput, tagSearchInput]);
 
   useEffect(() => {
     axios
@@ -31,19 +39,11 @@ export default function Main() {
   return (
     <div className="main">
       <SearchBar
-        searchField={["firstName", "lastName"]}
-        SearchInput={SearchInput}
-        setSearchInput={setSearchInput}
-        setFilteredData={setFilteredData}
-        data={data}
+        setSearchInput={setNameSearchInput}
         placeHolder="Search by name"
       />
       <SearchBar
-        searchField={["tags"]}
-        SearchInput={SearchInput}
-        setSearchInput={setSearchInput}
-        setFilteredData={setFilteredData}
-        data={data}
+        setSearchInput={setTagSearchInput}
         placeHolder="Search by tag"
       />
       {filteredData.map((row, index) => {
